@@ -1,5 +1,7 @@
 package ui;
 
+import bean.Employee;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -7,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Stack;
 
@@ -15,8 +18,13 @@ public class EmployeeManagerUI extends JFrame{
     private JTable table;
     private DefaultTableModel model;
     private JTextField nameTextFieldSearch;
+    private static ArrayList<Employee> employees = new ArrayList<>();
 
     public  EmployeeManagerUI() {
+    }
+
+    public EmployeeManagerUI(String username) {
+        super("Welcome, " + username);
         frame = this;
         initialize();
         this.setVisible(true);
@@ -102,11 +110,16 @@ public class EmployeeManagerUI extends JFrame{
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                new AddEmployeeUI(EmployeeManagerUI.this);
             }
         });
 
         frame.getContentPane().add(topPanel, BorderLayout.NORTH);
         frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
+    }
+
+    public void addEmployee(Employee employee) {
+        employees.add(employee);
+        model.addRow(new Object[]{employee.getId(), employee.getName(), employee.getGender(), employee.getAge(), employee.getPhoneNumber(), employee.getPosition(), employee.getEmploymentDate(), employee.getSalary(), employee.getDepartment(),});
     }
 }

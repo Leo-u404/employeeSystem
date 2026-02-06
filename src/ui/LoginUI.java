@@ -61,6 +61,7 @@ public class LoginUI extends JFrame implements ActionListener {
         passwordField = new JPasswordField();
         passwordField.setBounds(160,150,190,30);
         passwordField.setFont(customFont);
+        passwordField.setEchoChar('*');
         panel.add(passwordField);
 
         loginButton = new JButton("Login");
@@ -90,8 +91,26 @@ public class LoginUI extends JFrame implements ActionListener {
         if (btn == loginButton) {
             login();
         }else {
-
+            register();
         }
+    }
+
+    private void register() {
+        String loginName = loginNameField.getText();
+        String password = new String(passwordField.getPassword());
+
+        if (loginName.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "empty username or password");
+            return;
+        }
+        if (getUserByLoginName(loginName) != null) {
+            JOptionPane.showMessageDialog(this, "username already exists");
+            return;
+        }
+        User newUser = new User(loginName, password, loginName);
+        allUsers.add(newUser);
+
+        JOptionPane.showMessageDialog(this, "register successfully!");
     }
 
     private void login() {
@@ -102,7 +121,7 @@ public class LoginUI extends JFrame implements ActionListener {
         if (user != null) {
             if (user.getPassword().equals(password)) {
                 System.out.println("login successfully!");
-                new EmployeeManagerUI();
+                new EmployeeManagerUI(user.getUsername());
                 this.dispose();
             }else {
                 JOptionPane.showMessageDialog(this, "wrong password");

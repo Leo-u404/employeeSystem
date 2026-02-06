@@ -12,9 +12,9 @@ public class Employee {
     private String name;
     private String gender;
     private int age;
-    private String phone_number;
+    private String phoneNumber;
     private String position;
-    private String employment_date;
+    private String employmentDate;
     private double salary;
     private String department;
 }
