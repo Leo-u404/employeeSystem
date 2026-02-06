@@ -20,6 +20,10 @@ public class EmployeeManagerUI extends JFrame{
     private JTextField nameTextFieldSearch;
     private static ArrayList<Employee> employees = new ArrayList<>();
 
+    static {
+        employees.add(new Employee(1, "Leo", "Male", 25, "0423413777", "Java developer", "06-02-2025", 3000, "Java"));
+    }
+
     public  EmployeeManagerUI() {
     }
 
@@ -28,6 +32,12 @@ public class EmployeeManagerUI extends JFrame{
         frame = this;
         initialize();
         this.setVisible(true);
+    }
+
+    public void loadEmployees(){
+        for (Employee employee : employees) {
+            model.addRow(new Object[]{employee.getId(), employee.getName(), employee.getGender(), employee.getAge(), employee.getPhoneNumber(), employee.getPosition(), employee.getEmploymentDate(), employee.getSalary(), employee.getDepartment()});
+        }
     }
 
     private void initialize() {
@@ -56,9 +66,7 @@ public class EmployeeManagerUI extends JFrame{
         JScrollPane scrollPane = new JScrollPane(table);
         table.setRowHeight(30);
 
-        for (int i = 0; i < 20; i++) {
-            model.addRow(new Object[]{i + 1, "employee" + (i + 1), "male", 21, "0411523986", "position" + (i + 1), new Date().toLocaleString(), 80000, "department" + (i + 1),});
-        }
+        loadEmployees();
 
         JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem editItem = new JMenuItem("edit");
@@ -84,7 +92,6 @@ public class EmployeeManagerUI extends JFrame{
                 int selectedRow = table.getSelectedRow();
                 if (selectedRow >= 0){
                     int id = (Integer) model.getValueAt(selectedRow, 0);
-                    JOptionPane.showMessageDialog(frame, "edit ID: " + id);
                 }
             }
         });
@@ -95,7 +102,8 @@ public class EmployeeManagerUI extends JFrame{
                 int selectedRow = table.getSelectedRow();
                 if (selectedRow >= 0){
                     int id = (Integer) model.getValueAt(selectedRow, 0);
-                    JOptionPane.showMessageDialog(frame, "delete ID: " + id);
+                    deleteEmployee(id);
+                    model.removeRow(selectedRow);
                 }
             }
         });
@@ -118,8 +126,18 @@ public class EmployeeManagerUI extends JFrame{
         frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
     }
 
+    private void deleteEmployee(int id) {
+        for (int i = 0; i < employees.size(); i++) {
+            Employee employee = employees.get(i);
+            if (employee.getId() == id) {
+                employees.remove(i);
+                break;
+            }
+        }
+    }
+
     public void addEmployee(Employee employee) {
         employees.add(employee);
-        model.addRow(new Object[]{employee.getId(), employee.getName(), employee.getGender(), employee.getAge(), employee.getPhoneNumber(), employee.getPosition(), employee.getEmploymentDate(), employee.getSalary(), employee.getDepartment(),});
+        model.addRow(new Object[]{employee.getId(), employee.getName(), employee.getGender(), employee.getAge(), employee.getPhoneNumber(), employee.getPosition(), employee.getEmploymentDate(), employee.getSalary(), employee.getDepartment()});
     }
 }
