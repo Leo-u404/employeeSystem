@@ -7,39 +7,38 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Date;
 import java.util.Stack;
 
-public class EmployeeManagerUI {
+public class EmployeeManagerUI extends JFrame{
     private JFrame frame;
     private JTable table;
     private DefaultTableModel model;
-    private JTextField textFieldSearch;
+    private JTextField nameTextFieldSearch;
 
-    public static void main(String[] args) {
-        EmployeeManagerUI window = new EmployeeManagerUI();
-        window.frame.setVisible(true);
+    public  EmployeeManagerUI() {
+        frame = this;
+        initialize();
+        this.setVisible(true);
     }
 
-    public  EmployeeManagerUI() { initialize(); }
-
     private void initialize() {
-        frame = new JFrame();
-        frame.setBounds(100,100,800,600);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setLayout(new BorderLayout());
+        this.setBounds(100,100,800,600);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.getContentPane().setLayout(new BorderLayout());
 
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        textFieldSearch = new JTextField(20);
+        nameTextFieldSearch = new JTextField(20);
         JButton btnSearch = new JButton("Search");
         JButton btnAdd = new JButton("Add");
-        topPanel.add(textFieldSearch);
+        topPanel.add(nameTextFieldSearch);
         topPanel.add(btnSearch);
         topPanel.add(btnAdd);
 
         model = new DefaultTableModel(
                 new Object[][]{},
-                new String[]{"ID", "NAME","POSITION","DEPARTMENT"}
+                new String[]{"ID", "NAME", "GENDER", "AGE", "PHONE NUMBER", "POSITION", "EMPLOYMENT DATE", "SALARY", "DEPARTMENT"}
         ) {
             @Override
             public boolean isCellEditable(int row, int column) {return false;}
@@ -50,7 +49,7 @@ public class EmployeeManagerUI {
         table.setRowHeight(30);
 
         for (int i = 0; i < 20; i++) {
-            model.addRow(new Object[]{i + 1, "employee" + (i + 1), "position" + (i + 1), "department" + (i + 1),});
+            model.addRow(new Object[]{i + 1, "employee" + (i + 1), "male", 21, "0411523986", "position" + (i + 1), new Date().toLocaleString(), 80000, "department" + (i + 1),});
         }
 
         JPopupMenu popupMenu = new JPopupMenu();
@@ -96,7 +95,7 @@ public class EmployeeManagerUI {
         btnSearch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String searchValue = textFieldSearch.getText();
+                String searchValue = nameTextFieldSearch.getText();
             }
         });
 
