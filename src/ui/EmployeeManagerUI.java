@@ -92,7 +92,16 @@ public class EmployeeManagerUI extends JFrame{
                 int selectedRow = table.getSelectedRow();
                 if (selectedRow >= 0){
                     int id = (Integer) model.getValueAt(selectedRow, 0);
+                    Employee employee = getEmployeeById(id);
+                    String newName = JOptionPane.showInputDialog(frame, "edit name: ", employee.getName());
+
+                    if (newName != null) {
+                        employee.setName(newName);
+
+                        model.setValueAt(newName, selectedRow, 1);
+                    }
                 }
+
             }
         });
 
@@ -102,7 +111,7 @@ public class EmployeeManagerUI extends JFrame{
                 int selectedRow = table.getSelectedRow();
                 if (selectedRow >= 0){
                     int id = (Integer) model.getValueAt(selectedRow, 0);
-                    deleteEmployee(id);
+                    employees.remove(getEmployeeById(id));
                     model.removeRow(selectedRow);
                 }
             }
@@ -112,6 +121,12 @@ public class EmployeeManagerUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 String searchValue = nameTextFieldSearch.getText();
+                if (searchValue.isEmpty()) {
+                    clearTable();
+                    loadEmployees();
+                }else {
+                    loadEmployeesByName(searchValue);
+                }
             }
         });
 
@@ -126,14 +141,27 @@ public class EmployeeManagerUI extends JFrame{
         frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
     }
 
-    private void deleteEmployee(int id) {
+    private void loadEmployeesByName(String searchValue) {
+        clearTable();
+        for (Employee employee : employees) {
+            if (employee.getName().contains(searchValue)) {
+                model.addRow(new Object[]{employee.getId(), employee.getName(), employee.getGender(), employee.getAge(), employee.getPhoneNumber(), employee.getPosition(), employee.getEmploymentDate(), employee.getSalary(), employee.getDepartment()});
+            }
+        }
+    }
+
+    private void clearTable() {
+        model.setRowCount(0);
+    }
+
+    private Employee getEmployeeById(int id) {
         for (int i = 0; i < employees.size(); i++) {
             Employee employee = employees.get(i);
             if (employee.getId() == id) {
-                employees.remove(i);
-                break;
+                return employee;
             }
         }
+        return null;
     }
 
     public void addEmployee(Employee employee) {
